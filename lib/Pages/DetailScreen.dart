@@ -41,7 +41,7 @@ class _DetailScreenState extends State<DetailScreen> {
       _markers.add(
         Marker(
             markerId: MarkerId("0"),
-            position: LatLng(double.parse(widget.turf['Latitude']),double.parse(widget.turf['Longitude'])),
+            position: LatLng(widget.turf['Latitude'],widget.turf['Longitude']),
             icon:BitmapDescriptor.defaultMarker,
             infoWindow: InfoWindow(
                 title: widget.turf['TurfName']
@@ -76,7 +76,7 @@ class _DetailScreenState extends State<DetailScreen> {
               onMapCreated: _onMapCreated,
               markers: _markers,
               initialCameraPosition: CameraPosition(
-                target:LatLng(double.parse(widget.turf['Latitude']),double.parse(widget.turf['Longitude'])),
+                target:LatLng(widget.turf['Latitude'],widget.turf['Longitude']),
                 zoom: 20.0,
               ),
             ),),
@@ -130,7 +130,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: ListTile(
                       leading: Icon(Icons.phone_iphone_outlined),
                       title: Text('Booking Contact'),
-                      subtitle: Text(widget.turf['BookingContact']),
+                      subtitle: Text(widget.turf['BookingContact'].toString()),
 
                     ),
                   ),

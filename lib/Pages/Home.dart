@@ -9,10 +9,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:search_map_place/search_map_place.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:get/get.dart';
+
 import 'DetailScreen.dart';
 import 'ListScreen.dart';
 
@@ -31,9 +32,11 @@ class _HomeState extends State<Home> {
   Query _ref;
   GoogleMapController mapController;
   Position pos;
-  String result = "Not scanned yet!!  First scan QR code to pay";
-  String query='';
   bool searchState = false;
+  String result = "Not scanned yet!!  First scan QR code to pay";
+  void search(){
+
+  }
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
 
@@ -54,6 +57,7 @@ class _HomeState extends State<Home> {
     requestPermission();
     _ref=FirebaseDatabase.instance.reference()
         .child('turfdata');
+
   }
 
 
@@ -126,155 +130,157 @@ class _HomeState extends State<Home> {
           children: <Widget>[
 
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
 
-              children: [
-                SizedBox(height: 5,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset('assets/t1.jpg',
-                            width: 154,
-                            height: 90,
+                children: [
+                  SizedBox(height: 21,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
+                    children: [
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset('assets/t1.jpg',
+                              width: (MediaQuery.of(context).size.width)/2-50,
+                              height: 75,
+
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          top: 8,
-                          left: 9,
-                          child: SizedBox(
-                            height: 25,
-                            width: 70,
-                            child: RaisedButton(onPressed: () {},
-                              child: Text("PlaySpots",style: TextStyle(fontSize: 8,fontWeight: FontWeight.bold),),color: Colors.red,shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7.0),
-                                side: BorderSide(color: Colors.grey),
-                              ),
-                              textColor: Colors.white,
-                              elevation: 0.0,),
+                          Positioned(
+                            top: 5,
+                            left: 5,
+                            child: SizedBox(
+                              height: 25,
+                              width: 70,
+                              child: RaisedButton(onPressed: () {},
+                                child: Text("PlaySpots",style: TextStyle(fontSize: 8,fontWeight: FontWeight.bold),),color: Colors.red,shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7.0),
+                                  side: BorderSide(color: Colors.grey),
+                                ),
+                                textColor: Colors.white,
+                                elevation: 0.0,),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 11,),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset('assets/t2.jpg',
-                        width: 154,
-                        height: 90,
 
+                        ],
                       ),
-                    ),
-                  ],
-                ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset('assets/t2.jpg',
+                              width: (MediaQuery.of(context).size.width)/2-50,
+                              height: 75,
 
+                            ),
+                          ),
 
-                Text(turf['TurfName'],
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+                    ],
                   ),
-                ),
 
-                SizedBox(height: 10,),
-                Row(
-                  children: [
-                    Icon(Icons.location_on_outlined,
+                   SizedBox(height: 15,),
+                  Text(turf['TurfName'],
+                    style: TextStyle(
+                      fontSize: 18,
                       color: Colors.black,
-                      size: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width:6,),
-                    Text(turf['Location'],
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(width: 90,),
-                    CircleAvatar(
-                      backgroundColor: Colors.grey[300],
-                      radius: 18,
-                      child: Icon(
-                        Icons.bookmark_sharp,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.airport_shuttle,
-                      color: Colors.black,
-                      size: 15,
-                    ),
-                    SizedBox(width:6,),
-                    Text(turf['Distance'],
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                      ),
-                    ),
+                  ),
 
-                  ],
-                ),
-                SizedBox(height: 5,),
-                Row(
-                  children: <Widget>[
-                    Text(turf['Pricing'],
-                      style: TextStyle(
-                        fontSize: 15,
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on_outlined,
                         color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                        size: 15,
                       ),
-                    ),
-                    SizedBox(width: 4,),
-                    Text('.',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                      SizedBox(width:6,),
+                      Text(turf['Location'],
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 4,),
-                    Text(turf['PreferredFormat'],
-                      style: TextStyle(
-                        fontSize: 13,
+                      SizedBox(width: 90,),
+                      CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        radius: 18,
+                        child: Icon(
+                          Icons.bookmark_sharp,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.airport_shuttle,
                         color: Colors.black,
+                        size: 15,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10,),
-                Row(
-                  children: <Widget>[
-                    RaisedButton(onPressed: () {},child: Text("Book Now"),color: Colors.green,shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        side: BorderSide(color: Colors.green)
-                    ),
-                    textColor: Colors.white,),
-                    SizedBox(width: 10,),
-                    RaisedButton(onPressed: () {
-                      customLaunch(turf['LocationLink']);
-                    },child: Text("Directions"),color: Colors.white,shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        side: BorderSide(color: Colors.grey)
-                    ),
-                      textColor: Colors.black,
-                    elevation: 0.0,)
+                      SizedBox(width:6,),
+                      Text(turf['Distance'],
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                      ),
 
-                  ],
-                ),
+                    ],
+                  ),
+                  SizedBox(height: 5,),
+                  Row(
+                    children: <Widget>[
+                      Text(turf['Pricing'],
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 4,),
+                      Text('.',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 4,),
+                      Text(turf['PreferredFormat'],
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: <Widget>[
+                      RaisedButton(onPressed: () {
 
-              ]
-          ),
-        ],
+                      },child: Text("Book Now"),color: Colors.green,shape:RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          side: BorderSide(color: Colors.green)
+                      ),
+                        textColor: Colors.white,),
+                      SizedBox(width: 10,),
+                      RaisedButton(onPressed: () {
+                        customLaunch(turf['LocationLink']);
+                      },child: Text("Directions"),color: Colors.white,shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          side: BorderSide(color: Colors.grey)
+                      ),
+                        textColor: Colors.black,
+                        elevation: 0.0,)
+
+                    ],
+                  ),
+
+                ]
+            ),
+          ],
         ),
       ),
     );
@@ -334,13 +340,13 @@ class _HomeState extends State<Home> {
             ),),
 
           Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
+              top: 0,
+              right: 0,
+              left: 0,
 
               child: Container(
                 height:58,
-               color: Colors.white,
+                color: Colors.white,
                 child: Column(
                   children: [
                     SizedBox(height: 10,),
@@ -357,7 +363,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Container(
-                          width: 300,
+                            width: 300,
                             height: 40,
                             decoration: BoxDecoration(
                                 border: Border.all(
@@ -365,39 +371,39 @@ class _HomeState extends State<Home> {
                                 ),
                                 borderRadius: BorderRadius.all(Radius.circular(20))
                             ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                      SizedBox(width: 10,),
-                                     !searchState?Text('Search for Turfs, Tennis Courts'):
-                                                               Expanded(
-                                                                 child: TextField(
-                                                                   decoration: InputDecoration(
-                                                                     icon: Icon(Icons.search),
-                                                                     hintText: 'Search....',
-                                                                     hintStyle: TextStyle(
-                                                                       color:Colors.grey,
-                                                                     )
-                                                                   ),
-                                                                 ),
-                                                               ),
-                                    !searchState?IconButton(
-                                          color: Colors.grey,
-                                          icon: Icon(Icons.search),
-                                          onPressed: () {
-                                                setState(() {
-                                                  searchState = !searchState;
-                                                });
-                                          },):
-                                    IconButton(
-                                      color: Colors.grey,
-                                      icon: Icon(Icons.cancel),
-                                      onPressed: () {
-                                        setState(() {
-                                          searchState = !searchState;
-                                        });
-                                      },),
-                                ],
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(width: 10,),
+                                !searchState?Text('Search for Turfs, Tennis Courts'):
+                                Expanded(
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                        icon: Icon(Icons.search),
+                                        hintText: 'Search....',
+                                        hintStyle: TextStyle(
+                                          color:Colors.grey,
+                                        )
+                                    ),
+                                  ),
+                                ),
+                                !searchState?IconButton(
+                                  color: Colors.grey,
+                                  icon: Icon(Icons.search),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchState = !searchState;
+                                    });
+                                  },):
+                                IconButton(
+                                  color: Colors.grey,
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchState = !searchState;
+                                    });
+                                  },),
+                              ],
 
 
                             )
@@ -410,7 +416,6 @@ class _HomeState extends State<Home> {
                 ),
               )
           ),
-
 
           Positioned(
               top:(MediaQuery.of(context).size.height)/2-60,
@@ -440,24 +445,29 @@ class _HomeState extends State<Home> {
               left: 5,
               right: 5,
               bottom:0,
+
               child:FutureBuilder(
 
                   future: currentLocation(),
                   builder: (BuildContext context,AsyncSnapshot snapshot){
                     if(snapshot.hasData){
                       return Center(
-                        child:FirebaseAnimatedList(query: _ref, scrollDirection:Axis.horizontal,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index,
-                            ){
-                          Map turf = snapshot.value;
 
-                          double distance=Geolocator.distanceBetween(pos.latitude,pos.longitude,double.parse(turf['Latitude']),double.parse(turf['Longitude']));
-                          if((distance/1000)>20){
-                            Map turf1= snapshot.value;
-                            turf1.putIfAbsent('Distance', () => (distance/1000).toString()+' km');
-                            return _buildTurfItem(turf: turf1);}
+                          child:FirebaseAnimatedList(query: _ref,
+                              sort: (a, b) => (Geolocator.distanceBetween(pos.latitude,pos.longitude,a.value['Latitude'],a.value['Longitude'])).compareTo((Geolocator.distanceBetween(pos.latitude,pos.longitude,b.value['Latitude'],b.value['Longitude']))),
+                              //  sort: (a, b) => (Geolocator.distanceBetween(pos.latitude,pos.longitude,double.parse(a.value['Latitude']),double.parse(a.value['Longitude']))).compareTo((Geolocator.distanceBetween(pos.latitude,pos.longitude,double.parse(b.value['Latitude']),double.parse(b.value['Longitude'])))),
+                              scrollDirection: Axis.horizontal,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index,
+                                  ){
 
-                        },),
-                      );
+                                Map turf = snapshot.value;
+                                String distance=((Geolocator.distanceBetween(pos.latitude,pos.longitude,turf['Latitude'],turf['Longitude']))/1000).toString();
+                                //  String distance=(Geolocator.distanceBetween(pos.latitude,pos.longitude,double.parse(turf['Latitude']),double.parse(turf['Longitude']))).toString();
+                                turf.putIfAbsent('Distance', () => distance+"km");
+                                return _buildTurfItem(turf: turf);}
+                          ) );
+
+
+
                     }
                     else{
                       return Center(
@@ -472,46 +482,5 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-  }
-
-
-}
-
-class _MySearchDelegate extends SearchDelegate<String>{
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-        tooltip: 'Clear',
-          icon: Icon(Icons.clear),
-          onPressed: (){
-          query= '';
-          showSuggestions(context);
-          }
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-   return IconButton(
-     icon: AnimatedIcon(
-       icon: AnimatedIcons.menu_arrow,progress: transitionAnimation,
-     ),
-     onPressed: (){
-       close(context,null);
-     },
-   );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-   return Text(query);
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    throw UnimplementedError();
   }
 }

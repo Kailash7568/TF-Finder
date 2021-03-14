@@ -19,6 +19,7 @@ class ListScreen extends StatefulWidget {
 class _ListScreenState extends State<ListScreen> {
   Query _ref;
   Position pos;
+  List mapList=List(78);
   Future<String> currentLocation() async {
     pos=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return 'Location Recieved';
@@ -44,7 +45,7 @@ class _ListScreenState extends State<ListScreen> {
       child:Container(
         margin: EdgeInsets.all(5),
         padding: EdgeInsets.all(10),
-        height: 250,
+        height: 280,
         width: 300,
 
         decoration: BoxDecoration(
@@ -83,16 +84,16 @@ class _ListScreenState extends State<ListScreen> {
                       Stack(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                             child: Image.asset('assets/t1.jpg',
-                              width: 158,
-                              height: 90,
+                              width: (MediaQuery.of(context).size.width)/2-30,
+                              height: 85,
 
                             ),
                           ),
                           Positioned(
-                            top: 7,
-                            left: 9,
+                            top: 5,
+                            left: 4,
                             child: SizedBox(
                               height: 25,
                               width: 70,
@@ -108,19 +109,19 @@ class _ListScreenState extends State<ListScreen> {
 
                         ],
                       ),
-                      SizedBox(width: 4,),
+                      SizedBox(width: 10,),
                       Stack(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                             child: Image.asset('assets/t2.jpg',
-                              width: 158,
-                              height: 90,
+                              width: (MediaQuery.of(context).size.width)/2-30,
+                              height: 85,
 
                             ),
                           ),
                           Positioned(
-                            top: 45,
+                            top: 40,
                             left: 27,
                             child: RaisedButton(onPressed: () {},child: Text("Book Now"),color: Colors.green,shape:RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25.0),
@@ -244,28 +245,22 @@ class _ListScreenState extends State<ListScreen> {
                   builder: (BuildContext context,AsyncSnapshot snapshot){
                     if(snapshot.hasData){
                       return Center(
-                        child:FirebaseAnimatedList(query: _ref,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index,
-                            ){
-                          Map turf = snapshot.value;
-
-                          double distance=Geolocator.distanceBetween(pos.latitude,pos.longitude,double.parse(turf['Latitude']),double.parse(turf['Longitude']));
-                          if((distance/1000)>20){
-                            Map turf1=snapshot.value;
-                            turf1.putIfAbsent('Distance', () => (distance/1000).toString()+' km');
-                            return _buildTurfItem1(turf: turf);}
-                          else{
-                            return CircularProgressIndicator();
-                          }
-                        },),
+                          child:FirebaseAnimatedList(query: _ref,
+                              sort: (a, b) => (Geolocator.distanceBetween(pos.latitude,pos.longitude,a.value['Latitude'],a.value['Longitude'])).compareTo((Geolocator.distanceBetween(pos.latitude,pos.longitude,b.value['Latitude'],b.value['Longitude']))),
+                              itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index,
+                                  ){
+                                Map turf = snapshot.value;
+                                double distance=Geolocator.distanceBetween(pos.latitude,pos.longitude,turf['Latitude'],turf['Longitude']);
+                                turf.putIfAbsent('Distance', () => (distance/1000).toString()+"km");
+                                return _buildTurfItem1(turf: turf);}
+                          )
                       );
                     }
                     else{
                       return Center(
                         child:CircularProgressIndicator(),
                       );
-                    }
-
-                  }
+                    }}
               )
 
           ),
